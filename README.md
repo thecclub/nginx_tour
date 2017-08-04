@@ -4,3 +4,10 @@
 * Ask the user to go into a certain folder
 * Ask user to change a file
 * Check if file changed is correctly configured
+
+Note
+* After each command user runs check the state
+* If state is the intended one, great, move to next state, otherwise ask the user try again
+* Note the number of trials and state in env variables
+* If number of trials > 3, run the command tell user what had to be done, move to next state
+* Need to fire a script after each command by user, to check the state 
