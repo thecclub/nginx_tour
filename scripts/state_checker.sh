@@ -15,7 +15,7 @@ else
   echo "File abc was not correctly added"
 fi
 ;;
-"done") 
+"add_text") 
 echo "done"
 ;;
 *)
