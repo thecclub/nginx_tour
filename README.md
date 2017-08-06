@@ -8,7 +8,13 @@
 Note
 * After each command user runs check the state -- done
 * If state is the intended one, great, move to next state, otherwise ask the user try again -- done
-* Note the number of trials and state in env variables
-* If number of trials > 3, run the command tell user what had to be done, move to next state
+* Note the number of trials and state in env variables -- done
+* If number of trials > 3, run the command tell user what had to be done, move to next state -- done
 * Need to fire a script after each command by user, to check the state  --done
 * Use file system to store env variables. In .project folder. File `status` should contain status, file `number_of_tries` should contain number of tries for that particular state
+
+Steps 
+* Install Nginx
+* Check status of nginx
+* setup a html file
+
