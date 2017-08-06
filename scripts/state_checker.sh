@@ -1,24 +1,17 @@
-state="$tour_state"
-case "$state" in 
-"start")       
-echo "Go to this /home/c_club"
-if [ "$PWD" = /home/c_club ]; then
-  export tour_state="add_file"
-`# add else case`
+if [ "$tour_state" = "start" ]; then    
+        if [ "$PWD" = /home/c_club ]; then
+          export tour_state="add_file"
+        else
+          echo "Go to this /home/c_club"
+        fi
 fi
-;;
-"add_file") 
-echo "You need to add a file named abc in the current folder"
-if [ -e /home/c_club/abc ]; then
-  export tour_state="add_text"
-else
-  echo "File abc was not correctly added"
+if [ "$tour_state" = "add_file" ]; then
+        if [ -e /home/c_club/abc ]; then
+          export tour_state="add_text"
+        else
+          echo "You need to add a file named abc in the current folder"
+        fi
 fi
-;;
-"add_text") 
-echo "done"
-;;
-*)
-echo "invalid state \"$state\""
-;;
-esac
+if [ "$tour_state" = "add_text" ]; then
+        echo "done"
+fi
