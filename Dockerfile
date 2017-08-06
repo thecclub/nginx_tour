@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 RUN apt-get update
-RUN apt-get install -y  git curl
+RUN apt-get install -y  git curl nano
 RUN mkdir /home/c_club
 ADD scripts /home
 RUN echo "echo \"Hello,  Welcome\"" >> /root/.bashrc
