@@ -2,7 +2,7 @@
 
 * When the user logs in display a greeting -- done
 * Ask the user to go into a certain folder -- done
-* Ask user to change a file 
+* Ask user to change a file -- done
 * Check if file changed is correctly configured
 
 Note
