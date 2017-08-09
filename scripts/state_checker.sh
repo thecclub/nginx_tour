@@ -65,8 +65,9 @@ if [ "$tour_state" == "install_nginx" ]; then
         current_state="install_nginx"
 
         if [ -x /usr/sbin/nginx ]; then
-          export tour_state="finished"
+          export tour_state="stop_nginx"
           export number_of_trials=0
+          service nginx start
         else
           echo "Install Nginx"
           number_of_trials=$((number_of_trials+ 1))
@@ -75,10 +76,54 @@ if [ "$tour_state" == "install_nginx" ]; then
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
           echo "You had to do: apt-get install -y nginx"
           apt-get install -y nginx
+          service nginx start
+          export tour_state="stop_nginx"
+          export number_of_trials=0
+        fi
+fi
+
+if [ "$tour_state" ==  "stop_nginx" ]; then
+        current_state="stop_nginx"
+        service=nginx
+
+        if (( $(ps -ef | grep -v grep | grep $service | wc -l) == 0 ))
+        then
+          export tour_state="start_nginx"
+          export number_of_trials=0
+        else
+          echo "Stop the Nginx service"
+          number_of_trials=$((number_of_trials+ 1))
+        fi
+
+        if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
+          echo "You had to do: service nginx stop"
+          service nginx stop
+          export tour_state="start_nginx"
+          export number_of_trials=0
+        fi
+fi
+
+if [ "$tour_state" ==  "start_nginx" ]; then
+        current_state="start_nginx"
+        service=nginx
+
+        if (( $(ps -ef | grep -v grep | grep $service | wc -l) > 0 ))
+        then
+          export tour_state="finished"
+          export number_of_trials=0
+        else
+          echo "Start the Nginx service"
+          number_of_trials=$((number_of_trials+ 1))
+        fi
+
+        if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
+          echo "You had to do: service nginx stop"
+          service nginx stop
           export tour_state="finished"
           export number_of_trials=0
         fi
 fi
+
 
 if [ "$tour_state" == "finished" ]; then
         echo "Nice job! You have completed this exercise"
