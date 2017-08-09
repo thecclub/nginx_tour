@@ -26,7 +26,7 @@ fi
 if [ "$tour_state" == "add_file" ]; then
         current_state="add_file"
 
-        if [ -e /home/c_club/abc ]; then
+        if ! [ -d /home/c_club/abc ] && [ -e /home/c_club/abc ]; then
           export tour_state="add_text"
           export number_of_trials=0
         else
@@ -46,7 +46,7 @@ if [ "$tour_state" == "add_text" ]; then
         current_state="add_text"
         
         if [[ "$( cat /home/c_club/abc )" == $add_text_string ]]; then
-          export tour_state="finished"
+          export tour_state="install_nginx"
           export number_of_trials=0
         else
           echo "In file abc write: Hello World!"
@@ -56,6 +56,25 @@ if [ "$tour_state" == "add_text" ]; then
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
           echo "You had to do: nano abc. Then write Hello World! "
           echo "Hello World!" >>  /home/c_club/abc
+          export tour_state="install_nginx"
+          export number_of_trials=0
+        fi
+fi
+
+if [ "$tour_state" == "install_nginx" ]; then 
+        current_state="install_nginx"
+
+        if [ -x /usr/sbin/nginx ]; then
+          export tour_state="finished"
+          export number_of_trials=0
+        else
+          echo "Install Nginx"
+          number_of_trials=$((number_of_trials+ 1))
+        fi
+
+        if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
+          echo "You had to do: apt-get install -y nginx"
+          apt-get install -y nginx
           export tour_state="finished"
           export number_of_trials=0
         fi
