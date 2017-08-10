@@ -1,7 +1,12 @@
 FROM ubuntu:latest
 
 RUN apt-get update
-RUN apt-get install -y  git curl nano vim
+RUN apt-get install -y  git curl nano vim wget
+RUN wget https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.8.3.linux-amd64.tar.gz
+ENV GOPATH="/root/.go"
+ENV PATH="$PATH:/usr/local/go/bin:$GOPATH/bin/"
+RUN go get github.com/yudai/gotty
 RUN mkdir /home/c_club
 ADD scripts /home
 RUN echo "echo \"Hello,  Welcome\"" >> /root/.bashrc
