@@ -9,18 +9,32 @@ function change_state(){
         export number_of_trials=0
 }
 
+function print_task() {
+        RED='\033[0;31m'
+        RESET='\033[0m'
+        
+        echo -e "${RED} $1 ${RESET}"
+}
+
+function print_help() {
+        GREEN='\033[0;32m'
+        RESET='\033[0m'
+
+        echo -e "${GREEN} $1 ${RESET}"
+}
+
 if [ "$tour_state" == "start" ]; then    
         current_state="start"
 
         if [ "$PWD" == /home/c_club ]; then
           change_state "add_file"
         else
-          echo "Go to this /home/c_club"
+          print_task "Go to this /home/c_club"
           number_of_trials=$((number_of_trials+ 1))
         fi
 
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
-          echo "You had to do: cd /home/c_club"
+          print_help "You had to do: cd /home/c_club"
           move_to_c_club
 
           change_state "add_file"
@@ -33,13 +47,13 @@ if [ "$tour_state" == "add_file" ]; then
         if ! [ -d /home/c_club/abc ] && [ -e /home/c_club/abc ]; then
           change_state "add_text"
         else
-          echo "You need to add a file named abc in the current folder"
+          print_task "You need to add a file named abc in the current folder"
           number_of_trials=$((number_of_trials+ 1))
         fi
 
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
           echo "You had to do: touch abc"
-          touch /home/c_club/abc
+          print_help /home/c_club/abc
 
           change_state "add_text"
         fi
@@ -51,12 +65,12 @@ if [ "$tour_state" == "add_text" ]; then
         if [[ "$( cat /home/c_club/abc )" == $add_text_string ]]; then
           change_state "install_nginx"
         else
-          echo "In file abc write: Hello World!"
+          print_task "In file abc write: Hello World!"
           number_of_trials=$((number_of_trials+ 1))
         fi
 
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
-          echo "You had to do: nano abc. Then write Hello World! "
+          print_help "You had to do: nano abc. Then write Hello World! "
           echo "Hello World!" >>  /home/c_club/abc
           change_state "install_nginx"
         fi
@@ -69,12 +83,12 @@ if [ "$tour_state" == "install_nginx" ]; then
           change_state "stop_nginx"
           service nginx start
         else
-          echo "Install Nginx"
+          print_task "Install Nginx"
           number_of_trials=$((number_of_trials+ 1))
         fi
 
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
-          echo "You had to do: apt-get install -y nginx"
+          print_help "You had to do: apt-get install -y nginx"
           apt-get install -y nginx
           service nginx start
           change_state "stop_nginx"
@@ -89,12 +103,12 @@ if [ "$tour_state" ==  "stop_nginx" ]; then
         then
           change_state "start_nginx"
         else
-          echo "Stop the Nginx service"
+          print_task "Stop the Nginx service"
           number_of_trials=$((number_of_trials+ 1))
         fi
 
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
-          echo "You had to do: service nginx stop"
+          print_help "You had to do: service nginx stop"
           service nginx stop
           change_state "start_nginx"
         fi
@@ -108,12 +122,12 @@ if [ "$tour_state" ==  "start_nginx" ]; then
         then
           change_state "finished"
         else
-          echo "Start the Nginx service"
+          print_task "Start the Nginx service"
           number_of_trials=$((number_of_trials+ 1))
         fi
 
         if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
-          echo "You had to do: service nginx stop"
+          print_help "You had to do: service nginx stop"
           service nginx stop
 
           change_state "finished"
