@@ -14,6 +14,5 @@ ENV PROMPT_COMMAND="${PROMPT_COMMAND} source /home/state_checker.sh"
 RUN chmod 777 /home/state_checker.sh /home/source_state_checker.sh
 ENV tour_state="start"
 ENV number_of_trials=0
-RUN precmd() { source /home/state_checker.sh; }
 EXPOSE 80
-CMD ["/bin/bash"]
+CMD [ "gotty", "-w", "-p", "8000", "/bin/bash"]
