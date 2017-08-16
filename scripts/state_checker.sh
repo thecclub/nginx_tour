@@ -80,7 +80,7 @@ if [ "$tour_state" == "install_nginx" ]; then
         current_state="install_nginx"
 
         if [ -x /usr/sbin/nginx ]; then
-          change_state "stop_nginx"
+          change_state "go_to_nginx_folder"
           service nginx start
         else
           print_task "Install Nginx"
@@ -91,9 +91,30 @@ if [ "$tour_state" == "install_nginx" ]; then
           print_help "You had to do: apt-get install -y nginx"
           apt-get install -y nginx
           service nginx start
+          change_state "go_to_nginx_folder"
+        fi
+fi
+
+if [ "$tour_state" == "go_to_nginx_folder" ]; then
+        current_state="go_to_nginx_folder"
+        destination=/var/www/html
+
+        if [ "$PWD" == "$destination" ]; then
+          change_state "stop_nginx"
+        else
+          print_task "Go to this $destination"
+          number_of_trials=$((number_of_trials+ 1))
+        fi
+
+        if [ "$tour_state" == "$current_state" ] && [ "$number_of_trials" -gt 3 ]; then
+          print_help "You had to do: cd $destination"
+          move_to_c_club
+
           change_state "stop_nginx"
         fi
 fi
+
+
 
 if [ "$tour_state" ==  "stop_nginx" ]; then
         current_state="stop_nginx"
